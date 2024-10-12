@@ -1,0 +1,75 @@
+---
+title: "R Notebook"
+output:
+  html_notebook: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+Universidad de San Carlos de Guatemala
+Facultad de Ingeniería 
+Escuela de Estudios de Postgrado
+Gabriela Maryorie Molina Castillo
+Introducción a la Minería de Datos
+```{r}
+install.packages("arules")
+install.packages("dplyr")
+library(arules)  
+library(dplyr)
+```
+
+
+```{r}
+data <- read.csv('PERSONA_BDP.csv', sep = ',')
+names(data)
+
+```
+Aplicando el algoritmo Apriori
+
+```{r}
+reglas <- apriori(data, parameter=list(support=0.2, confidence=0.5))
+```
+```{r}
+data$PEA <- NULL 
+data$POCUPA <- NULL
+
+```
+
+```{r}
+data$PEI <- as.factor(data$PEI)
+data$departamento <- NULL
+data$municipio <- NULL
+data$cod_municipio <- NULL
+data$LUGAR_POBLADO <- NULL
+data$PCP10_C <- NULL
+
+```
+```{r}
+data$PCP10_D <- NULL
+data$PCP11_C <- NULL
+```
+Cambiando la data a factores
+```{r}
+
+library(dplyr)
+
+# Reemplaza los valores de las columnas no lógicas o no factores por factores
+data <- data %>%
+  mutate(across(where(~ !is.logical(.) & !is.factor(.)), as.factor))
+
+# Opcional: Eliminar columnas que no tengan suficiente variabilidad
+# Esto se puede hacer si alguna columna tiene solo un único valor
+data <- data %>%
+  select(where(~ n_distinct(.) > 1))
+
+# Verifica los tipos de columnas después de la transformación
+str(data)
+
+```
+
+```{r}
+reglas <- apriori(data, parameter=list(support=0.2, confidence=0.5))
+inspect(reglas[0:200])
+```
+
