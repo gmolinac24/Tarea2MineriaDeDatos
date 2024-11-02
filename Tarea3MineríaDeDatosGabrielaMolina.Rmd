@@ -1,0 +1,47 @@
+Universidad de San Carlos de Guatemala
+Facultad de Ingeniería
+Escuela de Estudios de Postgrado
+Gabriela Maryorie Molina Castillo
+Introducción a la Minería de Datos
+
+```{r}
+install.packages("arules")
+library(arules)
+```
+
+```{r}
+library(arules)
+library(tidyverse)
+library(dplyr)
+library(fim4r)
+```
+
+Importando archivo .csv
+
+```{r}
+data <- read.csv('MIGRACION_BDP.csv', sep = ',')
+names(data)
+```
+Seleccionando la data
+
+```{r}
+fim4r()
+data_an <- data[,c(1,2,9,10,11)]
+```
+Aplicando algoritmo
+
+```{r}
+reglas <- fim4r(data_an, method = "fpgrowth", target="rules", supp = .2, conf = .5)
+```
+
+
+```{r}
+reglasframe <- as(reglas, "data.frame")
+view(reglasframe)
+```
+```{r}
+reglas <- fim4r(data, method = "fpgrowth", target="rules", supp = .2, conf = .5)
+reglasframe_data <- as(reglas, "data.frame")
+view(reglasframe_data)
+```
+
